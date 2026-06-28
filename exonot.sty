@@ -1,0 +1,53 @@
+%%
+%% exonot.sty -- <short description of the package>
+%%
+%% Copyright (C) 2026 Rishabh Garg
+%%
+%% This work may be distributed and/or modified under the conditions of
+%% the LaTeX Project Public License, either version 1.3c of this license
+%% or (at your option) any later version. The latest version of this
+%% license is in https://www.latex-project.org/lppl.txt
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%%
+\NeedsTeXFormat{LaTeX2e}[2020/10/01]
+\ProvidesPackage{exonot}[2026/06/27 v0.1.0 <short description of the package>]
+
+%% ---------------------------------------------------------------------------
+%% Required packages
+%% ---------------------------------------------------------------------------
+\RequirePackage{xcolor}
+\RequirePackage{kvoptions}
+
+%% ---------------------------------------------------------------------------
+%% Package options
+%% ---------------------------------------------------------------------------
+\SetupKeyvalOptions{
+  family=exonot,
+  prefix=exonot@,
+}
+
+% Example boolean option:  \usepackage[draft]{exonot}
+\DeclareBoolOption{draft}
+% Example string option:   \usepackage[color=blue]{exonot}
+\DeclareStringOption[black]{color}
+
+\ProcessKeyvalOptions{exonot}
+
+%% ---------------------------------------------------------------------------
+%% Internal helpers
+%% ---------------------------------------------------------------------------
+\newcommand{\exonot@warn}[1]{\PackageWarning{exonot}{#1}}
+
+%% ---------------------------------------------------------------------------
+%% Public macros
+%% ---------------------------------------------------------------------------
+% \hello -- a minimal demonstration command; replace with real macros.
+\newcommand{\hello}[1][world]{%
+  \textcolor{\exonot@color}{Hello, #1!}%
+  \ifexonot@draft\space\textbf{[draft]}\fi
+}
+
+\endinput
+%%
+%% End of file `exonot.sty'.

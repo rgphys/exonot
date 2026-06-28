@@ -1,0 +1,28 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.glg
+*.nav
+*.snm
+*.vrb
+
+# Generated from .dtx/.ins (uncomment if you adopt DocStrip)
+# exonot.sty
+exonot.pdf
+example.pdf
