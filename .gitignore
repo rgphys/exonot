@@ -24,7 +24,5 @@
 
 # Generated from exonot.dtx via DocStrip (regenerate with: tex exonot.ins)
 exonot.sty
-exonot.pdf
-exonot-demo.pdf
 exonot.zip
 *.hd
