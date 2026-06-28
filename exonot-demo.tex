@@ -1,0 +1,107 @@
+% exonot-demo.tex -- demonstration of the exonot package.
+% Compile with:  pdflatex exonot-demo.tex
+% Dependencies (all standard TeX Live): amsmath, amssymb, booktabs, geometry.
+
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[margin=1in]{geometry}
+
+\usepackage[symbols]{exonot}
+
+\title{The \texttt{exonot} package: standardized exoplanet notation}
+\author{Rishabh Garg}
+\date{2026-06-27}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present transmission spectroscopy of the hot Saturn
+\system{WASP-39}{b}, a \ensuremath{0.28}\,\Mjup{} planet orbiting its
+host \star{A} with a period \Porb${}=4.06$\,d at a semi-major axis
+\aorb${}=0.0486$\,au.  The retrieved spectrum shows strong \HO{},
+\COtwo, and \SOtwo{} absorption, with tentative \CO{} and \CH, in a
+\Htwo/\Helium{} dominated atmosphere of mean molecular weight
+\mmw${}\approx2.3$ and carbon-to-oxygen ratio \CtoO${}\approx0.35$.  The
+inferred equilibrium temperature is \Teq${}\approx1170$\,K and the
+atmospheric scale height \Hatm{} is large enough to yield a transit
+signal of several hundred \ppm{}, detected at \snr${}>20$ per
+resolution element.
+\end{abstract}
+
+\section{System and stellar parameters}
+
+The host star \star{A} has effective temperature \Teff, surface gravity
+\logg, luminosity \Lsun, mass \Mstar${}=0.93$\,\Msun, radius
+\Rstar${}=0.90$\,\Rsun, and metallicity \FeH${}=-0.10$.  The orbit is
+consistent with circular (\ecc${}<0.05$) and well aligned
+(\obliq${}\approx0^\circ$), with inclination \inc${}=87.8^\circ$ and
+radial-velocity semi-amplitude \Krv${}=33$\,m\,s$^{-1}$.  Planetary
+parameters for \system{WASP-39}{b} are collected in
+Table~\ref{tab:params}.  Companion candidates would be labelled
+\planet{c}, \planet{d}, and so on.
+
+\begin{table}[ht]
+  \centering
+  \caption{Measured and derived parameters of \system{WASP-39}{b}.}
+  \label{tab:params}
+  \begin{tabular}{llr}
+    \toprule
+    Parameter                 & Symbol     & Value            \\
+    \midrule
+    Planet mass               & \Mp        & $0.28$\,\Mjup    \\
+    Planet radius             & \Rp        & $1.27$\,\Rjup    \\
+    Planet density            & \rhop      & $0.17$\,g\,cm$^{-3}$ \\
+    Orbital period            & \Porb      & $4.06$\,d        \\
+    Semi-major axis           & \aorb      & $0.0486$\,au     \\
+    Eccentricity              & \ecc       & $<0.05$          \\
+    RV semi-amplitude         & \Krv       & $33$\,m\,s$^{-1}$\\
+    Equilibrium temperature   & \Teq       & $1170$\,K        \\
+    Surface gravity           & \logg      & $2.63$           \\
+    Impact parameter          & \bparam    & $0.45$           \\
+    Transit depth             & \tdepth    & $0.0211$         \\
+    Total transit duration    & \tdur      & $2.80$\,h        \\
+    Ingress/egress duration   & \ting      & $0.24$\,h        \\
+    Limb-darkening coeff.     & \ldc[1]    & $0.42$           \\
+    Mean molecular weight     & \mmw       & $2.3$            \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Atmospheric scale height}
+
+The pressure scale height that sets the amplitude of the transmission
+signal follows from hydrostatic equilibrium,
+\begin{equation}
+  \Hatm = \frac{\kB\,\Teq}{\mmw\,\mH\,g},
+  \label{eq:scaleheight}
+\end{equation}
+where \kB{} is the Boltzmann constant, \mH{} the mass of a hydrogen
+atom, and $g$ the surface gravity (here written as \logg).  The
+corresponding transit depth is
+\begin{equation}
+  \delta = \tdepth,
+\end{equation}
+so the spectral modulation across the transmission spectrum \Rspec{}
+scales as $2\Hatm/R_{\starsym}$ in units of \tdepth.
+
+\section{Composition}
+
+Retrieved volume mixing ratios for the dominant absorbers are
+\vmr{\HO}${}\sim10^{-3}$, \vmr{\COtwo}${}\sim10^{-4}$,
+\vmr{\CO}${}\sim10^{-4}$, and \vmr{\CH}${}<10^{-6}$, alongside a
+photochemically produced \SOtwo{} component and high-altitude hazes.
+Optical absorbers such as \NaI, \KI, \TiO, and \VO{} are not required by
+the data, nor are \Htwo{}O-dissociation tracers like \Hminus{} or
+\eminus.  Model comparison favours the cloudy, \SOtwo-bearing fit with
+$\Delta\BIC\approx-32$ (equivalently a Bayes factor $\ln\Bfac\approx16$
+and \redchisq${}\approx1.05$).  After correcting for a stellar
+contamination factor \fcont${}\approx0.99$, the data remain consistent
+with a \Htwo/\Helium{} envelope of metallicity \FeH${}\approx+1$.  Earth
+(\Earth) and Sun (\Sun) symbols are available when the \texttt{symbols}
+option is loaded.
+
+\end{document}

@@ -1,41 +1,141 @@
-%%
-%% This is file `exonot.sty',
-%% generated with the docstrip utility.
-%%
-%% The original source files were:
-%%
-%% exonot.dtx  (with options: `package')
-%% 
-%% This is a generated file.
-%% 
-%% Copyright (C) 2026 Rishabh Garg
-%% 
-%% This work may be distributed and/or modified under the conditions of
-%% the LaTeX Project Public License, either version 1.3c of this license
-%% or (at your option) any later version. The latest version of this
-%% license is in:
-%% 
-%%   https://www.latex-project.org/lppl.txt
-%% 
-%% and version 1.3c or later is part of all distributions of LaTeX
-%% version 2008 or later.
-%% 
-%% This work has the LPPL maintenance status `maintained'.
-%% 
-%% The Current Maintainer of this work is Rishabh Garg.
-%% 
+% \iffalse meta-comment
+%
+% exonot.dtx -- documented source for the exonot package.
+%
+% Copyright (C) 2026 Rishabh Garg
+%
+% This work may be distributed and/or modified under the conditions of
+% the LaTeX Project Public License, either version 1.3c of this license
+% or (at your option) any later version. The latest version of this
+% license is in https://www.latex-project.org/lppl.txt and version
+% 1.3c or later is part of all distributions of LaTeX version 2008 or
+% later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% The Current Maintainer of this work is Rishabh Garg.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{exonot}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{exonot.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{469}
+%
+% \GetFileInfo{exonot.sty}
+%
+% \title{The \textsf{exonot} package\thanks{This document
+%   corresponds to \textsf{exonot}~\fileversion, dated \filedate.}}
+% \author{Rishabh Garg \\ \texttt{26rishabhgarg@gmail.com}}
+% \date{\filedate}
+%
+% \maketitle
+%
+% \begin{abstract}
+%   \textsf{exonot} provides standardized macros for exoplanet science and
+%   planetary astrophysics notation: masses and radii, system designations,
+%   atmospheric and spectroscopy symbols, orbital elements, and
+%   observational and statistical quantities. Every macro is wrapped in
+%   |\ensuremath|, so it works in both text and math mode, and all
+%   subscripts are typeset upright (|\mathrm|) following IAU style.
+% \end{abstract}
+%
+% \section{Usage}
+%
+% Load the package in the preamble:
+% \begin{quote}
+%   |\usepackage{exonot}|             \quad default\\
+%   |\usepackage[symbols]{exonot}|    \quad also defines |\Earth| and |\Sun|\\
+%   |\usepackage[siunitx]{exonot}|    \quad defines SI units \emph{if}
+%   \textsf{siunitx} is loaded first
+% \end{quote}
+%
+% \DescribeMacro{\Mjup}
+% \DescribeMacro{\Rearth}
+% \DescribeMacro{\Teq}
+% Quantity macros expand to a symbol with an upright subscript, e.g.
+% |\Mjup| \(\to\) \Mjup, |\Rearth| \(\to\) \Rearth, |\Teq| \(\to\) \Teq.
+%
+% \DescribeMacro{\star}
+% \DescribeMacro{\planet}
+% \DescribeMacro{\system}
+% System notation: |\star{A}| \(\to\) \star{A} is a host-star/component
+% label carrying a star subscript, |\planet{b}| \(\to\) \planet{b} is an
+% upright planet letter, and |\system{WASP-39}{b}| \(\to\)
+% \system{WASP-39}{b} typesets a full system name with correct
+% non-breaking spacing.
+%
+% \DescribeMacro{\vmr}
+% \DescribeMacro{\ldc}
+% A few macros take arguments: |\vmr{\HO}| \(\to\) \vmr{\HO} is a volume
+% mixing ratio, and |\ldc| takes an optional index, so |\ldc| \(\to\)
+% \ldc{} while |\ldc[1]| \(\to\) \ldc[1].
+%
+% \section{Package options}
+%
+% \begin{description}
+%   \item[\texttt{symbols}] Loads \textsf{textcomp} and defines |\Earth|
+%     (\(\oplus\)) and |\Sun| (\(\odot\)) for use in text or math.
+%   \item[\texttt{siunitx}] If \textsf{siunitx} is already loaded, declares
+%     the units |\earthmass|, |\jupitermass|, |\solarmass|, |\earthradius|,
+%     |\jupiterradius|, |\solarradius| and |\solarluminosity|; otherwise it
+%     issues a warning rather than failing.
+% \end{description}
+%
+% \section{A note on \cmd{\star}}
+%
+% In standard \LaTeX{} |\star| is the \(\starsym\) binary operator.
+% \textsf{exonot} redefines it for the system-notation API |\star{name}|.
+% The original symbol is preserved as \DescribeMacro{\starsym}|\starsym| in
+% case the operator is still needed.
+%
+% \StopEventually{}
+%
+% \section{Implementation}
+%
+% \subsection{Identification}
+%    \begin{macrocode}
+%<*package>
 \NeedsTeXFormat{LaTeX2e}[2020/10/01]
 \ProvidesPackage{exonot}[2026/06/27 v1.1.0 Standardized exoplanet and planetary astrophysics notation]
+%    \end{macrocode}
+%
+% \subsection{Package options}
+% Two boolean flags, populated by the option declarations.
+%    \begin{macrocode}
 \newif\ifexo@symbols
 \newif\ifexo@siunitx
 \DeclareOption{symbols}{\exo@symbolstrue}
 \DeclareOption{siunitx}{\exo@siunitxtrue}
 \DeclareOption*{\PackageWarning{exonot}{Unknown option `\CurrentOption'}}
 \ProcessOptions\relax
+%    \end{macrocode}
+%
+% \subsection{Required packages and \cmd{\star} preservation}
+% We need \textsf{amsmath} and \textsf{amssymb}, and we stash the original
+% |\star| operator before it is redefined.
+%    \begin{macrocode}
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
 \let\exo@starsym\star
 \providecommand{\starsym}{\exo@starsym}
+%    \end{macrocode}
+%
+% \subsection{Units and physical quantities}
+% Masses, radii, luminosity, temperatures, gravity, period, axis, transit
+% depth and scale height.
+%    \begin{macrocode}
 \newcommand{\Mearth}{\ensuremath{M_{\oplus}}}        % M with Earth symbol     -> M_Earth
 \newcommand{\Mjup}{\ensuremath{M_{\mathrm{J}}}}      % M with roman "J"         -> M_J
 \newcommand{\Msun}{\ensuremath{M_{\odot}}}           % M with Sun symbol        -> M_Sun
@@ -50,20 +150,39 @@
 \newcommand{\Teq}{\ensuremath{T_{\mathrm{eq}}}}      % T_eq
 \newcommand{\tdepth}{\ensuremath{\left(R_{\mathrm{p}}/R_{\exo@starsym}\right)^{2}}} % (R_p/R_star)^2
 \newcommand{\Hatm}{\ensuremath{H}}                   % H
+%    \end{macrocode}
+%
+% Generic planet and star quantities (the stellar versions reuse the
+% preserved star symbol as subscript).
+%    \begin{macrocode}
 \newcommand{\Mp}{\ensuremath{M_{\mathrm{p}}}}        % planet mass    -> M_p
 \newcommand{\Rp}{\ensuremath{R_{\mathrm{p}}}}        % planet radius  -> R_p
 \newcommand{\Mstar}{\ensuremath{M_{\exo@starsym}}}   % stellar mass   -> M_star
 \newcommand{\Rstar}{\ensuremath{R_{\exo@starsym}}}   % stellar radius -> R_star
 \newcommand{\rhop}{\ensuremath{\rho_{\mathrm{p}}}}   % planet density -> rho_p
 \newcommand{\rhostar}{\ensuremath{\rho_{\exo@starsym}}} % stellar dens.-> rho_star
+%    \end{macrocode}
+%
+% Physical constants.
+%    \begin{macrocode}
 \newcommand{\kB}{\ensuremath{k_{\mathrm{B}}}}        % Boltzmann constant      -> k_B
 \newcommand{\mH}{\ensuremath{m_{\mathrm{H}}}}        % hydrogen-atom mass      -> m_H
 \newcommand{\amu}{\ensuremath{m_{\mathrm{u}}}}       % atomic mass unit        -> m_u
 \newcommand{\Gnewton}{\ensuremath{G}}                % gravitational constant  -> G
 \newcommand{\stefan}{\ensuremath{\sigma_{\mathrm{SB}}}} % Stefan-Boltzmann     -> sigma_SB
+%    \end{macrocode}
+%
+% \subsection{Exoplanet system notation}
+%    \begin{macrocode}
 \renewcommand{\star}[1]{\ensuremath{#1_{\exo@starsym}}}   % \star{A} -> A_star
 \newcommand{\planet}[1]{\textnormal{#1}}                  % \planet{b} -> b
 \newcommand{\system}[2]{#1\nobreakspace\planet{#2}}       % \system{WASP-39}{b} -> WASP-39 b
+%    \end{macrocode}
+%
+% \subsection{Atmospheric and spectroscopy notation}
+% Common molecules. Macro names follow the chemical formula: monoxides are
+% |\CO|, |\SO|, |\SiO|; dioxides are |\COtwo|, |\SOtwo|, |\SiOtwo|.
+%    \begin{macrocode}
 \newcommand{\HO}{\ensuremath{\mathrm{H_2O}}}         % water              -> H2O
 \newcommand{\CO}{\ensuremath{\mathrm{CO}}}           % carbon monoxide    -> CO
 \newcommand{\COtwo}{\ensuremath{\mathrm{CO_2}}}      % carbon dioxide     -> CO2
@@ -83,17 +202,33 @@
 \newcommand{\CtwoHtwo}{\ensuremath{\mathrm{C_2H_2}}} % acetylene          -> C2H2
 \newcommand{\OCS}{\ensuremath{\mathrm{OCS}}}         % carbonyl sulfide   -> OCS
 \newcommand{\PHthree}{\ensuremath{\mathrm{PH_3}}}    % phosphine          -> PH3
+%    \end{macrocode}
+%
+% Metal oxides and hydrides (hot-Jupiter optical absorbers). Note that
+% |\FeHyd| is the iron-hydride \emph{molecule}; the metallicity [Fe/H] is
+% |\FeH| below.
+%    \begin{macrocode}
 \newcommand{\TiO}{\ensuremath{\mathrm{TiO}}}         % titanium oxide  -> TiO
 \newcommand{\VO}{\ensuremath{\mathrm{VO}}}           % vanadium oxide  -> VO
 \newcommand{\FeHyd}{\ensuremath{\mathrm{FeH}}}       % iron hydride    -> FeH  (cf. \FeH = [Fe/H])
 \newcommand{\CaH}{\ensuremath{\mathrm{CaH}}}         % calcium hydride -> CaH
 \newcommand{\MgH}{\ensuremath{\mathrm{MgH}}}         % magnesium hyd.  -> MgH
+%    \end{macrocode}
+%
+% Atomic and ionic absorbers; the ionisation stage is a small-caps roman
+% numeral.
+%    \begin{macrocode}
 \newcommand{\NaI}{\ensuremath{\mathrm{Na}\,\textsc{i}}}   % neutral sodium    -> Na I
 \newcommand{\KI}{\ensuremath{\mathrm{K}\,\textsc{i}}}     % neutral potassium -> K I
 \newcommand{\FeI}{\ensuremath{\mathrm{Fe}\,\textsc{i}}}   % neutral iron      -> Fe I
 \newcommand{\FeII}{\ensuremath{\mathrm{Fe}\,\textsc{ii}}} % singly-ionised Fe -> Fe II
 \newcommand{\Hminus}{\ensuremath{\mathrm{H}^{-}}}        % H minus ion       -> H^-
 \newcommand{\eminus}{\ensuremath{e^{-}}}                 % electron          -> e^-
+%    \end{macrocode}
+%
+% Mean molecular weight, volume mixing ratio, composition ratios and
+% metallicity, spectral resolution, and stellar contamination.
+%    \begin{macrocode}
 \newcommand{\mmw}{\ensuremath{\mu}}                  % mu
 \newcommand{\vmr}[1]{\ensuremath{X_{#1}}}            % volume mixing ratio
 \newcommand{\CtoO}{\ensuremath{\mathrm{C/O}}}        % carbon-to-oxygen ratio -> C/O
@@ -101,6 +236,10 @@
 \newcommand{\MH}{\ensuremath{[\mathrm{M/H}]}}        % bulk metallicity       -> [M/H]
 \newcommand{\Rspec}{\ensuremath{R_{\lambda}}}        % R_lambda
 \newcommand{\fcont}{\ensuremath{f_{\mathrm{cont}}}}  % f_cont
+%    \end{macrocode}
+%
+% Thermal structure.
+%    \begin{macrocode}
 \newcommand{\Tday}{\ensuremath{T_{\mathrm{day}}}}    % dayside temperature   -> T_day
 \newcommand{\Tnight}{\ensuremath{T_{\mathrm{night}}}}% nightside temperature -> T_night
 \newcommand{\Tint}{\ensuremath{T_{\mathrm{int}}}}    % internal temperature  -> T_int
@@ -111,6 +250,10 @@
 \newcommand{\albedo}{\ensuremath{A_{\mathrm{B}}}}    % Bond albedo           -> A_B
 \newcommand{\insol}{\ensuremath{S}}                  % instellation flux     -> S
 \newcommand{\redist}{\ensuremath{f}}                 % heat-redistribution f -> f
+%    \end{macrocode}
+%
+% \subsection{Orbital and dynamical quantities}
+%    \begin{macrocode}
 \newcommand{\ecc}{\ensuremath{e}}                    % eccentricity            -> e
 \newcommand{\inc}{\ensuremath{i}}                    % inclination             -> i
 \newcommand{\argperi}{\ensuremath{\omega}}           % argument of periastron  -> omega
@@ -121,6 +264,10 @@
 \newcommand{\Krv}{\ensuremath{K}}                    % RV semi-amplitude       -> K
 \newcommand{\massfn}{\ensuremath{f(m)}}              % spectroscopic mass fn.  -> f(m)
 \newcommand{\obliq}{\ensuremath{\lambda}}            % sky-projected obliquity -> lambda
+%    \end{macrocode}
+%
+% \subsection{Observational quantities}
+%    \begin{macrocode}
 \newcommand{\tdur}{\ensuremath{T_{14}}}              % total transit duration  -> T_14
 \newcommand{\ting}{\ensuremath{T_{12}}}              % ingress/egress duration -> T_12
 \newcommand{\bparam}{\ensuremath{b}}                 % impact parameter        -> b
@@ -129,17 +276,32 @@
 \newcommand{\fratio}{\ensuremath{F_{\mathrm{p}}/F_{\exo@starsym}}} % planet/star flux -> F_p/F_star
 \newcommand{\edepth}{\ensuremath{\delta_{\mathrm{ecl}}}}          % eclipse depth     -> delta_ecl
 \newcommand{\ppm}{\ensuremath{\mathrm{ppm}}}         % parts per million (unit) -> ppm
+%    \end{macrocode}
+%
+% \subsection{Statistics and model comparison}
+%    \begin{macrocode}
 \newcommand{\chisq}{\ensuremath{\chi^{2}}}           % chi-squared         -> chi^2
 \newcommand{\redchisq}{\ensuremath{\chi^{2}_{\nu}}}  % reduced chi-squared -> chi^2_nu
 \newcommand{\BIC}{\ensuremath{\mathrm{BIC}}}         % Bayesian info crit. -> BIC
 \newcommand{\AIC}{\ensuremath{\mathrm{AIC}}}         % Akaike info crit.   -> AIC
 \newcommand{\lnL}{\ensuremath{\ln\mathcal{L}}}       % log-likelihood      -> ln L
 \newcommand{\Bfac}{\ensuremath{\mathcal{B}}}         % Bayes factor        -> B
+%    \end{macrocode}
+%
+% \subsection{Optional \texttt{symbols} support}
+%    \begin{macrocode}
 \ifexo@symbols
   \RequirePackage{textcomp}
   \providecommand{\Earth}{\ensuremath{\oplus}}       % Earth symbol, text or math
   \providecommand{\Sun}{\ensuremath{\odot}}          % Sun symbol,   text or math
 \fi
+%    \end{macrocode}
+%
+% \subsection{Optional \texttt{siunitx} support}
+% Units are declared only if \textsf{siunitx} is actually loaded, otherwise
+% we warn instead of failing. The new names avoid clobbering the macros
+% above.
+%    \begin{macrocode}
 \ifexo@siunitx
   \AtBeginDocument{%
     \@ifpackageloaded{siunitx}{%
@@ -157,8 +319,8 @@
     }%
   }%
 \fi
-%% 
-%% End of file `exonot.sty'.
-%% 
-%%
-%% End of file `exonot.sty'.
+%</package>
+%    \end{macrocode}
+%
+% \Finale
+\endinput
